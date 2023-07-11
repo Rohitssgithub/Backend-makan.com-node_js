@@ -30,7 +30,11 @@ const UserSchema = new mongoose.Schema({
     },
     confirmPassword: {
         type: String
-    }
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false,
+    },
 })
 
 UserSchema.methods.generateAuthToekn = async function () {

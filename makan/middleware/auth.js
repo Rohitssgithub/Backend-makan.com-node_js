@@ -1,28 +1,7 @@
 import jwt from 'jsonwebtoken'
 import user from "../model/user.model"
 const auth = async (req, res, next) => {
-
     try {
-        // if (req.headers.authorization) {
-        //     let token = req.headers.authorization;
-        //     let decodeToken = jwt.verify(token, process.env.SECRAT_KEY);
-        //     // console.log(decodeToken)
-        //     req.user = decodeToken
-        //     // console.log(req.user)
-        //     if (decodeToken) {
-        //         next();
-        //     }
-        //     else {
-        //         return res.status(401).json({
-        //             message: 'Invalid token'
-        //         });
-        //     }
-        // }
-        // else {
-        //     return res.status(401).json({
-        //         message: 'Invalid token'
-        //     })
-        // }
         let token = req.cookies.jwt;
         let decodeToken = jwt.verify(token, process.env.SECRAT_KEY);
         let rootuser = await user.findOne({ _id: decodeToken._id })
@@ -31,6 +10,7 @@ const auth = async (req, res, next) => {
         req.rootuser = rootuser
         // req.userID = rootuser._id
         next();
+       
     }
     catch (err) {
         return res.status(401).json({
@@ -39,4 +19,26 @@ const auth = async (req, res, next) => {
     }
 }
 
-export default auth;
+const verifyTokenAndAuthorization = (req, res, next) => {
+    auth(req, res, () => {
+        if (req.decodeToken === req.params.userID || req.rootuser.isAdmin) {
+            next();
+        } else {
+            res.status(403).json("You are not alowed to do that!");
+        }
+    });
+};
+
+
+const verifyTokenAndAdmin = (req, res, next) => {
+    auth(req, res, () => {
+        if (req.rootuser.isAdmin) {
+            next();
+        } else {
+            res.status(403).json("You are not alowed to do that!");
+        }
+    });
+};
+
+
+export { auth, verifyTokenAndAdmin, verifyTokenAndAuthorization }

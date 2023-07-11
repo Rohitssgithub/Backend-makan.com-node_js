@@ -1,11 +1,11 @@
 import express from "express";
 const router = express.Router();
-import auth from "../middleware/auth"
+import { auth, verifyTokenAndAdmin, verifyTokenAndAuthorization } from "../middleware/auth";
 
 import {
     signup, loginUser, updateUser, userData,
     addpProperty, getAllProperty, deleteProperty, getPropertyToBuy,
-    getwishlist, addpropertylist, updateUserWlist, updateUserAddedProperty
+    getwishlist, addpropertylist, updateUserWlist, updateUserAddedProperty, deleteUser
 } from "../controller/user.controller"
 
 // register user 
@@ -15,7 +15,8 @@ router.post("/user/login", loginUser)
 // get login user data 
 router.get("/user/data", auth, userData)
 // update data of login user 
-router.patch("/user/update", auth, updateUser)
+router.patch("/user/update", verifyTokenAndAuthorization, updateUser)
+router.delete("/user/delete", verifyTokenAndAuthorization, deleteUser)
 // add property to login user 
 router.post("/user/add/property", auth, addpProperty)
 // get all property added by user 

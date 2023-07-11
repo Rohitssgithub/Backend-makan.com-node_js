@@ -250,36 +250,36 @@ export const updateUser = async (req, res) => {
 
 
 // delete user using auth token 
-// export const deleteUser = async (req, res) => {
-//     try {
-//         let userdata = await user.findOne({ _id: req.user._id })
+export const deleteUser = async (req, res) => {
+    try {
+        let userdata = await user.findOne({ _id: req.user._id })
 
-//         fs.unlink("./uploadData/userimage/" + userdata.image, async function (err) {
-//             if (err) {
-//                 return res.status(400).json({ message: err })
-//             }
-//             console.log('Deleted succ')
-//             const data = await user.deleteOne({ _id: req.user._id })
-//             if (data) {
-//                 res.status(200).json({
-//                     data: data,
-//                     message: "data deleted"
-//                 })
-//             }
-//             else {
-//                 res.status(400).json({
-//                     message: "data not updated"
-//                 })
-//             }
-//         })
+        fs.unlink("./uploadData/userimage/" + userdata.image, async function (err) {
+            if (err) {
+                return res.status(400).json({ message: err })
+            }
+            console.log('Deleted succ')
+            const data = await user.deleteOne({ _id: req.user._id })
+            if (data) {
+                res.status(200).json({
+                    data: data,
+                    message: "data deleted"
+                })
+            }
+            else {
+                res.status(400).json({
+                    message: "data not updated"
+                })
+            }
+        })
 
-//     }
-//     catch (err) {
-//         res.status(500).json({
-//             message: err.message
-//         })
-//     }
-// }
+    }
+    catch (err) {
+        res.status(500).json({
+            message: err.message
+        })
+    }
+}
 
 
 
